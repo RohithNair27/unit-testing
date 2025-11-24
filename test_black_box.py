@@ -98,8 +98,5 @@ class TestSpeedControllerBlackBox(unittest.TestCase):
             result = self.controller.update_speed(road_condition, traffic_density, slope_pair[0])
             self.assertEqual(result, slope_pair[1], f"Failed for invalid slope: {slope_pair[0]}")
 
-    
-    
-
 if __name__ == "__main__":
     unittest.main()

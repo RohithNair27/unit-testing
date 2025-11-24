@@ -25,9 +25,9 @@ class SpeedController:
 
         base_speed = self.speed_limit
 
-        # Adjust for road condition (Bug 1: incorrect multiplier for 'wet')
+        # Adjust for road condition (Bug 1: incorrect multiplier for 'wet') - fixed
         if road_condition == 'wet':
-            self.weather_factor = 0.85  # should be 0.80
+            self.weather_factor = 0.80  
         elif road_condition == 'icy':
             self.weather_factor = 0.6
         elif road_condition == 'clear':
@@ -37,19 +37,18 @@ class SpeedController:
 
         base_speed *= self.weather_factor
 
-        # Adjust for traffic (Bug 2: wrong boundary check at 50)
-        if traffic_density >= 50:  # should be > 50
+        # Adjust for traffic 
+        if traffic_density > 50: 
             if traffic_density > 80:
                 base_speed -= 20
             else:
                 base_speed -= 10
 
-        # Adjust for slope (Bug 3: inverted slope adjustment)
         if slope_angle > 0:  # uphill
-            base_speed -= slope_angle  # should *increase* slightly to compensate
+            base_speed += slope_angle  
         elif slope_angle < 0:  # downhill
-            base_speed += abs(slope_angle)  # should *decrease* to maintain safety
-
+            base_speed -= abs(slope_angle)  
+        
         # Safety mode (Bug 4: wrong clamping)
         if self.safety_mode:
             base_speed = min(base_speed, self.speed_limit - 10)
